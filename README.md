@@ -26,6 +26,8 @@ project/
 │ ├── 02_1_cnn_baseline.ipynb
 │ ├── 02_cnn_baseline.ipynb
 │ ├── 03_vit_experiments.ipynb
+| ├── 04_ResNet50_noise.ipynb
+| ├── 05_Evaluar_ruido_GradCAM.ipynb
 | ├── prepare_dataset.py # Script para preparar y particionar el dataset
 │
 └── README.md
@@ -51,7 +53,7 @@ Ejecutar desde consola:
 python prepare_dataset.py
 ```
 
-### 2. 2.01_data_exploration.ipynb
+### 2. 01_data_exploration.ipynb
 
 Notebook de exploración inicial:
 
@@ -59,32 +61,51 @@ Notebook de exploración inicial:
 -   revisión de clases,
 - análisis básico de distribución y características del dataset.
 
-### 3. 02_1_cnn_baseline.ipynb
+### 3. 02_cnn_baseline.ipynb
 
-Primer experimento con CNN:
+Entrenamiento de ResNet-50, con dos configuraciones:
+- Con augmentación: rotaciones, flips, jitter, etc.
+- Sin augmentación: baseline puro
+Incluye:
+- Entrenamiento
+- Curvas de pérdida y exactitud
+- Reportes de clasificación
+- Matrices de confusión
+### 4. 02_1_cnn_baseline.ipynb
+Extiende el experimento CNN utilizando ResNet-101, una arquitectura más profunda.
+Se comparan nuevamente los escenarios:
+- Augmentation vs NoAug
+- Métricas finales y desempeño por clase
 
-- implementación del baseline con ResNet-50,
+### 5. 03_vit_experiments.ipynb
+Implementación del modelo Transformer para imágenes, ViT-B/16:
+- Fine-tuning completo
+- Training con AdamW
+- Dropout y Stochastic Depth
+- Comparación Aug vs NoAug
+- Matrices de confusión
+- Reportes de clasificación
 
-- entrenamiento inicial sin aumentación,
+### 6. 04_ResNet50_noise.ipynb
+Este notebook introduce ruido gaussiano en el entrenamiento:
+- Entrenamiento con augment + ruido
+- Entrenamiento solo ruido
+- Comparación con modelos base
+- Métricas en test limpio
+Es fundamental para evaluar robustez.
 
-- análisis preliminar del comportamiento del modelo.
-
-### 4. 02_cnn_baseline.ipynb
-
-Extensión del experimento anterior:
-
-- entrenamiento completo de ResNet-50 y ResNet-101,
-
-- configuraciones con y sin aumentación,
-
-- análisis comparativo entre ambas arquitecturas.
-
-5. 03_vit_experiments.ipynb
-
-Experimentos con Vision Transformer (ViT-B/16):
-
-- implementación del modelo,
-
-- entrenamiento bajo diferentes configuraciones,
-
-- comparación contra los modelos CNN.
+### 7. 05_Evaluar_ruido_GradCam.ipynb
+Evalúa modelos bajo distintos niveles de ruido gaussiano:
+- std = 0.0, 0.02, 0.05, 0.10, 0.20
+Modelos evaluados:
+- ResNet-50 (normal)
+- ResNet-101
+- ViT-B/16
+- ResNet-50 Noise-Trained
+Incluye:
+- Gráficas de degradación del Accuracy
+- Comparaciones entre modelos
+- Grad-CAM aplicado con ruido (0, 0.05, 0.2)
+Permite observar:
+- Qué modelos mantienen activaciones consistentes bajo condiciones adversas
+- Qué arquitectura resulta más robusta
