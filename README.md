@@ -109,3 +109,39 @@ Incluye:
 Permite observar:
 - Qué modelos mantienen activaciones consistentes bajo condiciones adversas
 - Qué arquitectura resulta más robusta
+
+## Modelos utilizados
+- ResNet-50 y ResNet-101
+Implementadas según los notebooks:
+- Uso de pesos preentrenados en ImageNet
+- Reemplazo de la FC por una capa de 4 clases
+- Entrenamiento con AdamW
+- Evaluación con métricas completas
+Los códigos utilizados corresponden a los archivos:
+- 02_cnn_baseline.ipynb
+- 02_1_cnn_baseline.ipynb
+
+## Vision Transformer ViT-B/16
+Implementado con timm:
+```bash
+timm.create_model("vit_base_patch16_224", pretrained=True)
+```
+Incluye ajustes:
+- drop_rate=0.1
+- drop_path_rate=0.1
+- Fine-tuning completo
+- Código en 03_vit_experiments.ipynb
+
+## ResNet-50 Noise-Trained
+Entrenada con ruido gaussiano aleatorio en cada batch:
+- Módulo personalizado RandomGaussianNoiseRange
+- Evaluación en datasets limpios y ruidosos
+- Código en 04_ResNet50_noise.ipynb
+
+## Evaluación de robustez + GradCAM
+Notebook especializado para:
+- Generación de ruido controlado
+- Evaluación comparativa de todos los modelos
+- Grad-CAM en ResNet y ViT
+- Uso de capa blocks[-1].norm1 para ViT
+- Código en 05_Evaluar_ruido_GradCAM.ipynb
